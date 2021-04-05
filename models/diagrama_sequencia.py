@@ -109,6 +109,7 @@ class Message(SequenceDiagramElement):
 
 class SequenceDiagram():
     def __init__(self, nome='', condicao_guarda=''):
+        self.elements = {}
         self.nome = ''
         self.condicao_guarda = ''
         self.life_lines = []
@@ -144,6 +145,7 @@ class SequenceDiagram():
     def dispose(self):
         self.nome = ''
         self.condicao_guarda = ''
+        self.elements = {}
         self.life_lines = {}
         self.messages = []
         self.fragments = []
@@ -165,6 +167,12 @@ class SequenceDiagram():
 
     def get_fragments(self):
         return self.fragments
+    
+    def set_elements(self, element):
+        self.elements[element.nome] = element
+    
+    def get_elements(self):
+        return self.elements
 
     def to_xml(self):
         xml = '<SequenceDiagrams>\n'
