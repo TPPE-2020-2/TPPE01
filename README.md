@@ -1,4 +1,4 @@
-# TPPE01
+# TPPE01 - Grupo 05
 
 Para executar basta está na pasta do projeto e rodar
 
