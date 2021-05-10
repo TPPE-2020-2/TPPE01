@@ -15,7 +15,10 @@ class SequenceDiagram():
             self.messages == sequence_diagram.messages and \
             self.fragments == sequence_diagram.fragments
     
-    def __str__(self):  # pragma: no cover
+    def __str__():  # pragma: no cover
+        return stringify_object
+
+    def stringify_object(self):
         return 'Name: {}\nGuard Condition: {}\nLife Lines: {}\nElements: {}\n'.format(self.name, \
                                                                             self.start_node, \
                                                                             self.life_lines, \
