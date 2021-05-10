@@ -1,87 +1,78 @@
-from models.diagrama_sequencia import SequenceDiagram
-from models.diagrama_sequencia import Fragment
-from models.diagrama_sequencia import Lifeline
-from models.diagrama_sequencia import Message
-
+from models.sequence_diagram import SequenceDiagram
+from models.fragment import Fragment
+from models.lifeline import Lifeline
+from models.message import Message
 from utils.utils import Util
+from time import sleep
 
 util = Util()
 
+
 def main():
     while(True):
-        resposta = menu()
-        if(resposta == '1'):
-            print('***** Diagrama de Sequencia *****')
-            nome = input('Insira o nome do Diagrama de Sequencia: ')
-            print('Insira a condição de guarda:')
-            print('1 - True')                       
-            print('2 - False')
-
-            condicao_guarda = input()
-            if(condicao_guarda == 1):
-                condicao_guarda = True
-            else:
-                condicao_guarda = False
-
-            diagrama_sequencia = SequenceDiagram(nome=nome, condicao_guarda=condicao_guarda)
-            menu_diagrama_sequencia(diagrama_sequencia)
+        print('----- Main Menu -----')
+        print('Select the diagram you want to generate:\n'
+            '1 - Sequence Diagram\n'
+            '2 - Exit')
+        user_in = input('Insert your option: ')
+        
+        if(user_in == '1'):
+            print('----- Sequence Diagram -----')
+            name = input('Insert the Sequence Diagram name: ')
+            print('Insert the guard condition:',
+                                    '\n 1 - True',
+                                    '\n 2 - False')
+            guard_condition = input()
+            guard_condition = True if guard_condition == 1 else False
+            sequence_diagram = SequenceDiagram(name=name, guard_condition=guard_condition)
+            sequence_diagram_menu(sequence_diagram)
             util.clear()
-        elif(resposta == '2'):
-            return 0
-        else:
-            util.clear()
-            print('Opcao invalida, tente novamente\n')
-
-def menu():
-    print('******** Bem Vindo ********')
-    print('Escolha um diagrama para gerar:')
-    print('1 - Diagrama de Sequencia')
-    print('2 - Sair do Programa')
-    resposta = input('Escolha sua opcao: ')
-    return resposta
-
-def menu_diagrama_sequencia(diagrama_sequencia):
-    util.clear()
-    lifelines = get_lifelines()
-    diagrama_sequencia.set_life_lines(lifelines)
-    while True:
-        print('***** Diagrama de Sequencia Menu *****')
-        print('Escolha o elemento qe você quer gerar: ')
-        print(f'1 - {util.MESSAGE}\n')
-        print(f'2 - {util.FRAGMENT}\n')
-        print('3 - Generate Diagram\n')
-        print('4 - Return to Main Menu')
-        resposta = input('Insira a opcao: ')
-        if resposta == '1':
-            # diagrama_sequencia.messages.append(add_message(lifelines))
-            diagrama_sequencia.set_messages(add_message(lifelines))
-            
-        elif resposta == '2':
-            # diagrama_sequencia.fragments.append(add_fragment())
-            diagrama_sequencia.set_fragments(add_fragment())
-        elif resposta == '3':
-            util.generate_diagrama_sequencia(diagrama_sequencia)
+        elif(user_in == '2'):
+            print('Leaving the program!')
             return 0
         else:
             util.clear()
             print('Invalid input. Please select again\n')
 
+
+def sequence_diagram_menu(sequence_diagram):
+    util.clear()
+    lifelines = get_lifelines()
+    sequence_diagram.set_life_lines(lifelines)
+    while True:
+        print('----- Sequence Diagram Menu -----')
+        print('Select the element you want to generate:\n'
+              f'1 - {util.MESSAGE}\n'
+              f'2 - {util.FRAGMENT}\n'
+              '3 - Return to Main Menu')
+        user_in = input('Insert your option: ')
+        if user_in == '1':
+            sequence_diagram.set_messages(add_message(lifelines))
+        elif user_in == '2':
+            sequence_diagram.set_fragments(add_fragment())
+        elif user_in == '3':
+            return sequence_diagram
+        else:
+            util.clear()
+            print('Invalid input. Please select again\n')
+
+
 def get_lifelines():
     lifelines = {}
-    lifelines_amount = input('Insira o numero de lifelines:')
+    lifelines_amount = input('Insert the number of lifelines:')
     for index, lifeline in enumerate(range(int(lifelines_amount))):
-        print(f'Insira o {index + 1} nome Lifeline: ')
-        lifeline_nome = input()
-        lifeline = Lifeline(id=index, nome=lifeline_nome)
+        print(f'Insert the {index + 1} Lifeline name: ')
+        lifeline_name = input()
+        lifeline = Lifeline(id=index, name=lifeline_name)
         lifelines[index] = lifeline
         print()
     return lifelines
 
 
 def add_fragment():
-    fragment_nome = input('Insira o nome do fragmento: ')
-    diagram_nome = input('Insira o nome do diagrama de sequencia: ')
-    fragment = Fragment(nome=fragment_nome, represented_by=diagram_nome)
+    fragment_name = input('Insert the Fragment name: ')
+    diagram_name = input('Insert the Sequence Diagram name: ')
+    fragment = Fragment(name=fragment_name, represented_by=diagram_name)
     return fragment
 
 
@@ -92,42 +83,38 @@ def add_message(lifelines):
         3: 'Reply'
     }
 
-    message_nome = input('Insira o nome da mensagem: ')
-    print(message_nome)
-    while(len(message_nome)==0):
-        print('MessageFormatException - You must define a message nome')
+    message_name = input('Insert the Message name: ')
+    while(len(message_name)==0):
+        print('MessageFormatException - You must define a message name')
 
-    print('Selecione a fonte lifeline: ')
+    print('Select the source Lifeline: ')
     print_lifelines(lifelines)
-    print(lifelines)
     try:
 
-        source_lifeline = lifelines[int(input('Qual a Lifeline inicial?'))]
+        source_lifeline = lifelines[int(input('Which is the initial Lifeline?'))]
     except:
-        print('MessageFormatException - Selecione uma Lifeline válida')
+        print('MessageFormatException - Please select a valid Lifeline')
         source_lifeline = lifelines[int(input('Which is the initial Lifeline?'))]
 
     try:
-        target_lifeline = lifelines[int(input('Qual a Lifeline final?'))]
+        target_lifeline = lifelines[int(input('Which is the final Lifeline?'))]
     except:
-        print('MessageFormatException - Selecione uma Lifeline valida')
-        target_lifeline = lifelines[int(input('Qual a Lifeline inicial?'))]
+        print('MessageFormatException - Please select a valid Lifeline')
+        target_lifeline = lifelines[int(input('Which is the initial Lifeline?'))]
 
-    prob = input('Como é a probabilidade da mensagem?')
+    prob = input('How much is the message probability?')
     print_message_type()
     message_type = message_type_dict[int(input())]
 
-    message = Message(nome=message_nome, source=source_lifeline,
+    message = Message(name=message_name, source=source_lifeline,
                       target=target_lifeline, prob=prob,
                       message_type=message_type)
     return message
 
-
 def print_lifelines(lifelines):
     print('Your Lifelines: ')
     for index, lifeline in lifelines.items():
-        print('Lifeline', str(index) + ':', lifeline.nome)
-
+        print('Lifeline', str(index) + ':', lifeline.name)
 
 def print_message_type():
     print('These are your message type options, please select one: ',
@@ -135,6 +122,16 @@ def print_message_type():
           '\n 2 - Aynchronous',
           '\n 3 - Reply')
 
+def create_sequence_diagram():
+    print('----- Sequence Diagram -----')
+    name = input('Insert the Sequence Diagram name: ')
+    print('Insert the guard condition:',
+                            '\n 1 - True',
+                            '\n 2 - False')
+    guard_condition = input()
+    guard_condition = True if guard_condition == 1 else False
+    sequence_diagram = SequenceDiagram(name=name, guard_condition=guard_condition)
+    return sequence_diagram
 
 if __name__ == '__main__':
     main()
