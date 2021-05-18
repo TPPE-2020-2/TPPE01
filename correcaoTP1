@@ -1,0 +1,21 @@
+Observações:
+------------
+Não foram implementadas as funcionalidades para criação de diagramas de
+atividades. Não foram criadas/lançadas/tratadas exceções conforme enunciado
+solicitou. Os testes não são executados conforme as instruções contidas no
+repositório. Há o início de uma implementação de testes parametrizados,
+contudo, sem efeitos.
+
+Critérios de avaliação:
+-----------------------
+
+O programa funciona como deveria (30 %)? 15 pontos. 
+
+Testes parametrizados foram implementados (20%) ? 5 pontos.
+
+Classes de exceções foram implementadas? Excecoes foram lançadas e tratadas?
+Testes de excecoes foram implementados? (- 10% para cada exceção não
+implementada adequadamente, limitado a 50% da nota): 0 pontos.
+
+
+NOTA FINAL: 20 pontos.
